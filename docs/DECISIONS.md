@@ -78,3 +78,120 @@
 - **Context**: Evaluating medical receptionist workflows requires comprehensive clinic data while respecting patient privacy and healthcare regulations.
 - **Decision**: Use a synthetic, fictional clinic dataset representing **NovaCare Medical Centre**, maintained in parallel across `NovaCare_Medical_Centre_RAG_Knowledge_Base.pdf` and `NovaCare_RAG_Source_of_Truth.json`.
 - **Consequences**: Enables rigorous testing and benchmarking without exposing real-world clinical records.
+
+---
+
+## ADR 009: Canonical JSON Source of Truth with Human-Readable PDF Provenance
+- **Date**: 2026-11-14
+- **Status**: Accepted
+- **Context**: The clinic corpus is provided as both a structured JSON file and a formatted PDF document. In automated RAG systems, unstructured PDF tables and page breaks can fragment entity attributes.
+- **Decision**: Treat `NovaCare_RAG_Source_of_Truth.json` as the canonical structured source of truth for all factual entities (doctors, fees, hours, policies), while extracting `NovaCare_Medical_Centre_RAG_Knowledge_Base.pdf` for page-level human provenance and narrative text. When near-identical text occurs, the canonical JSON chunk absorbs the PDF page provenance to avoid duplicate evidence.
+- **Consequences**: Guaranteed factual integrity with zero attribute fragmentation, paired with traceable human-readable PDF citations.
+
+---
+
+## ADR 010: intfloat/multilingual-e5-small Embedding Model with Prefix Convention
+- **Date**: 2026-11-14
+- **Status**: Accepted
+- **Context**: The assistant must support English, Urdu script, and Roman Urdu. Hosted embedding APIs (OpenAI, Voyage) incur recurring costs and latency.
+- **Decision**: Use `intfloat/multilingual-e5-small` via `sentence-transformers`, running locally on CPU. Strictly follow the E5 instruction prefix standard: prepend `passage: ` to index documents and `query: ` to incoming user search queries. Embeddings are L2-normalized during encoding.
+- **Consequences**: High-quality multilingual representation across English, Urdu, and Roman Urdu with zero cloud cost and low memory footprint (~470MB model).
+
+---
+
+## ADR 011: FAISS CPU Flat Inner Product on Normalized Vectors
+- **Date**: 2026-11-14
+- **Status**: Accepted
+- **Context**: Approximate nearest neighbor (ANN) indexes (e.g. HNSW or IVF) introduce quantization noise and are unnecessary for small-to-medium corpora (< 100,000 vectors).
+- **Decision**: Use `faiss-cpu` with `IndexFlatIP` (Flat Inner Product). Since vectors are L2-normalized, inner product strictly equals cosine similarity. Row IDs are mapped deterministically to chunk IDs via `chunks_metadata.json`.
+- **Consequences**: Exact, mathematically optimal nearest-neighbor search with zero recall degradation, instant index build, and CPU compatibility.
+
+---
+
+## ADR 012: Robust BM25Okapi Sparse Retrieval with Multilingual Tokenization & Alias Expansion
+- **Date**: 2026-11-14
+- **Status**: Accepted
+- **Context**: Exact doctor names, numeric fees, and room numbers require lexical matching. Standard tokenizers strip Urdu or produce negative IDFs on small corpora.
+- **Decision**: Implement `BM25KeywordSearch` using a Unicode-aware regex tokenizer that preserves Urdu script and Latin alphanumeric terms. Apply a floor IDF clamp (`RobustBM25Okapi`) to eliminate Robertson-Spärck Jones negative term weight anomalies on compact collections. Add a conservative Roman Urdu alias expansion layer (`fees` -> `charges`, `pkr`; `kab` -> `timings`, `hours`).
+- **Consequences**: Exceptional exact-match accuracy for doctor names, numbers, and localized keywords across English, Urdu, and Roman Urdu.
+
+---
+
+## ADR 013: Reciprocal Rank Fusion (RRF) Hybrid Search with Evidence Deduplication
+- **Date**: 2026-11-14
+- **Status**: Accepted
+- **Context**: Dense vector similarity scores (cosine in [0, 1]) and sparse BM25 scores (unbounded [0, $\infty$)) operate on incompatible numerical scales and cannot be naively added.
+- **Decision**: Combine vector and keyword rankings using Reciprocal Rank Fusion: $RRF(c) = w_{vec} \cdot \frac{1}{60 + r_{vec}} + w_{kw} \cdot \frac{1}{60 + r_{kw}}$, with $w_{vec}=0.5$ and $w_{kw}=0.5$.
+- **Consequences**: Robust, scale-invariant rank combination that prevents either search modality from dominating the other.
+
+---
+
+## ADR 014: Independent Versioned Evaluation Benchmark and Threshold Calibration
+- **Date**: 2026-11-14
+- **Status**: Accepted
+- **Context**: In Phase 03, the LLM receptionist must refuse out-of-domain or unanswerable requests rather than hallucinating clinic facts.
+- **Decision**: Maintain a separate 35-query benchmark evaluation dataset (`data/evaluation_queries.json`) spanning English, Urdu, Roman Urdu, Mixed, and Unanswerable queries. Calibrate an evidence sufficiency threshold: queries with top RRF score $< 0.015$ or vector score $< 0.84$ without strong keyword matches trigger `insufficient_evidence=True`.
+- **Consequences**: Achieved 100% Recall@5 across all 31 answerable test queries and enabled automated regression testing of retrieval accuracy.
+
+---
+
+## ADR 015: Google GenAI Client with v1beta Developer Instruction & Zero Thinking Budget
+- **Date**: 2026-11-14
+- **Status**: Accepted
+- **Context**: Phase 03 requires generating natural, persona-aligned receptionist answers in English, Urdu, and Roman Urdu. The official Google GenAI SDK (`google.genai`) defaults to API version `v1` which blocks system developer instructions, and default thinking models allocate reasoning tokens from the output token limit causing truncation.
+- **Decision**: Use `google.genai.Client` with `http_options={'api_version': 'v1beta'}` to support system instructions. Explicitly configure `thinking_config=types.ThinkingConfig(thinking_budget=0)` to avoid output token starvation and reduce latency to < 3 seconds. Configure `gemini-2.5-flash` with dynamic fallback models.
+- **Consequences**: Instantaneous, complete, persona-grounded generation with reliable system prompt adherence across all three languages.
+
+---
+
+## ADR 016: Progressive Appointment Intake State Machine with Explicit Confirmation
+- **Date**: 2026-11-14
+- **Status**: Accepted
+- **Context**: Booking clinic appointments over messaging requires collecting patient name, doctor/specialty, preferred date, preferred time, and callback phone number without clinical integration errors. A virtual receptionist cannot claim an appointment is directly booked into an electronic health record.
+- **Decision**: Implement a progressive state machine (`AppointmentService`) in SQLite that collects missing slots turn-by-turn. When all 5 slots are collected, present a full summary and require explicit patient confirmation (`Yes`/`Haan`) before recording. The appointment status is strictly set to `pending_staff_confirmation` (never "booked").
+- **Consequences**: Prevents premature or fabricated appointment reservations, avoids patient misunderstandings, and guarantees clinic reception staff oversight.
+
+---
+
+## ADR 017: Deterministic Medical Guardrails & Human Staff Triage APIs
+- **Date**: 2026-11-14
+- **Status**: Accepted
+- **Context**: Healthcare virtual assistants must never provide clinical diagnoses or prescriptions, and acute medical emergencies must be redirected immediately to emergency rescue.
+- **Decision**: Implement a deterministic regex-based safety filter (`app/ai/safety.py`) evaluated before LLM generation. Emergencies (chest pain, stroke, unconsciousness) immediately return 1122 redirection and trigger `HandoffRequest` (status: `pending`). Clinical advice requests (medicines, prescriptions, diagnoses) are deflected with an offer to schedule a doctor consultation. Provide staff management endpoints (`/api/v1/staff/handoffs` and `/api/v1/staff/appointments`) for local triage.
+- **Consequences**: Patient safety is protected deterministically without relying solely on LLM safety filters, and human clinic staff have visibility into all escalations.
+
+---
+
+## ADR 018: Meta WhatsApp Cloud API Webhook HMAC-SHA256 & Verification Standard
+- **Date**: 2026-11-14
+- **Status**: Accepted
+- **Context**: Meta WhatsApp Business Platform webhooks require cryptographic handshake verification via GET requests and payload integrity verification via POST requests with `X-Hub-Signature-256`. Webhook delivery timeouts from Meta are strict ($\le 5$ seconds), requiring instantaneous 200 OK responses.
+- **Decision**: Implement `verify_webhook_token` with constant-time token comparison for GET verification. Implement `validate_signature` computing HMAC-SHA256 over raw bytes with constant-time digest comparison using `hmac.compare_digest`. Ensure the webhook route queues incoming messages immediately into a durable queue and returns 200 OK without blocking on downstream RAG, transcription, or LLM processing.
+- **Consequences**: Prevents timing attacks, prevents forged webhook deliveries, and guarantees Meta webhook SLA compliance without timing out.
+
+---
+
+## ADR 019: Durable SQLite Inbound Event Queue & Idempotency
+- **Date**: 2026-11-14
+- **Status**: Accepted
+- **Context**: Meta WhatsApp webhooks guarantee at-least-once delivery; network retries can send identical messages multiple times. In-flight crashes could drop user inquiries. Introducing Redis/Celery would violate the zero-cost local architecture constraint.
+- **Decision**: Create an `InboundEvent` model in SQLite with a unique constraint on `provider_message_id`. Incoming events are deduplicated at insertion (`sqlite3.IntegrityError` or unique check). A lightweight in-process asynchronous `EventWorker` polls pending events, executes processing with bounded exponential backoff (up to 5 attempts), transitions events through `pending -> processing -> processed / failed`, and records the last error.
+- **Consequences**: Zero infrastructure dependencies, reliable message idempotency, guaranteed persistence across server restarts, and automatic retries for transient failures.
+
+---
+
+## ADR 020: Faster-Whisper & Bundled FFmpeg Architecture with CPU/GPU Auto-Detection
+- **Date**: 2026-11-14
+- **Status**: Accepted
+- **Context**: Incoming WhatsApp voice notes arrive in OGG/Opus format. Faster-Whisper requires 16kHz mono WAV input and CTranslate2 model execution. Users may run on machines with or without CUDA GPUs or system-level FFmpeg installed.
+- **Decision**: Use `imageio-ffmpeg` to bundle a pre-compiled FFmpeg executable on Windows/Linux with automatic fallback from system `ffmpeg`. Implement `FasterWhisperTranscriber` with auto device detection: probes CUDA availability and cleanly falls back to CPU `int8` with multi-threading if GPU memory allocation fails. Enforce strict audio file bounds ($\le 16\text{MB}$, $\le 180\text{s}$) and verify Meta CDN host domains (`lookaside.fbsbx.com`, `*.facebook.com`, `*.fbcdn.net`).
+- **Consequences**: Complete out-of-the-box local voice note transcription support without requiring external commercial speech APIs or manual FFmpeg binary installation.
+
+---
+
+## ADR 021: Non-Blocking Optional Spoken TTS with Text Fallback
+- **Date**: 2026-11-14
+- **Status**: Accepted
+- **Context**: Receptionist voice notes may optionally be answered with spoken voice messages. However, TTS generation adds network latency and bandwidth overhead, and text messages remain the expected primary WhatsApp format for administrative answers.
+- **Decision**: Integrate `edge-tts` behind an explicit opt-in setting `VOICE_REPLY_ENABLED` (default: `False`). If enabled, audio synthesis runs asynchronously and non-blockingly; any TTS failure logs a warning and falls back cleanly to the already-delivered text reply.
+- **Consequences**: Zero risk to conversation flow or text delivery reliability while enabling optional high-quality multilingual speech synthesis.

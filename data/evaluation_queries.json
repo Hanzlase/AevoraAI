@@ -1,0 +1,352 @@
+[
+  {
+    "query_id": "EN-001",
+    "language": "English",
+    "query": "How much is Dr Sana Malik's consultation?",
+    "expected_keywords": ["sana", "3500", "fee"],
+    "expected_entity_id": "DOC-003",
+    "is_answerable": true,
+    "description": "Direct fee query for Dr Sana Malik",
+    "is_held_out": false
+  },
+  {
+    "query_id": "EN-002",
+    "language": "English",
+    "query": "Is the clinic open on Sunday?",
+    "expected_keywords": ["sunday", "10:00", "14:00"],
+    "expected_entity_id": null,
+    "is_answerable": true,
+    "description": "Sunday clinic hours check",
+    "is_held_out": false
+  },
+  {
+    "query_id": "EN-003",
+    "language": "English",
+    "query": "Where is NovaCare Medical Centre located?",
+    "expected_keywords": ["crescent", "plaza", "f-10", "islamabad"],
+    "expected_entity_id": null,
+    "is_answerable": true,
+    "description": "Clinic address and landmark query",
+    "is_held_out": false
+  },
+  {
+    "query_id": "EN-004",
+    "language": "English",
+    "query": "What are the timings for Dr Hamza Qureshi?",
+    "expected_keywords": ["hamza", "qureshi", "4:00", "7:00"],
+    "expected_entity_id": "DOC-002",
+    "is_answerable": true,
+    "description": "Doctor OPD schedule query",
+    "is_held_out": false
+  },
+  {
+    "query_id": "EN-005",
+    "language": "English",
+    "query": "Do you accept credit cards or debit cards for payment?",
+    "expected_keywords": ["credit", "debit", "cash", "payment"],
+    "expected_entity_id": null,
+    "is_answerable": true,
+    "description": "Payment methods accepted",
+    "is_held_out": false
+  },
+  {
+    "query_id": "EN-006",
+    "language": "English",
+    "query": "How much does a follow up consultation cost with Dr Ayesha Rahman?",
+    "expected_keywords": ["ayesha", "1800", "follow-up"],
+    "expected_entity_id": "DOC-001",
+    "is_answerable": true,
+    "description": "Follow-up consultation fee lookup",
+    "is_held_out": true
+  },
+  {
+    "query_id": "EN-007",
+    "language": "English",
+    "query": "What is the cancellation policy for appointments?",
+    "expected_keywords": ["cancellation", "4", "hours"],
+    "expected_entity_id": null,
+    "is_answerable": true,
+    "description": "Appointment cancellation policy",
+    "is_held_out": true
+  },
+  {
+    "query_id": "EN-008",
+    "language": "English",
+    "query": "Is parking available at Crescent Plaza?",
+    "expected_keywords": ["parking", "basement", "crescent"],
+    "expected_entity_id": null,
+    "is_answerable": true,
+    "description": "Visitor parking availability",
+    "is_held_out": true
+  },
+  {
+    "query_id": "EN-009",
+    "language": "English",
+    "query": "Can walk-in patients see a pediatrician without booking?",
+    "expected_keywords": ["walk-in", "pediatrician", "capacity"],
+    "expected_entity_id": null,
+    "is_answerable": true,
+    "description": "Walk-in policy for pediatric care",
+    "is_held_out": true
+  },
+  {
+    "query_id": "EN-010",
+    "language": "English",
+    "query": "Does the clinic offer direct health insurance billing?",
+    "expected_keywords": ["insurance", "reimbursement", "direct"],
+    "expected_entity_id": null,
+    "is_answerable": true,
+    "description": "Insurance direct billing policy",
+    "is_held_out": true
+  },
+  {
+    "query_id": "UR-001",
+    "language": "Urdu",
+    "query": "ڈاکٹر ثنا ملک کی فیس کتنی ہے؟",
+    "expected_keywords": ["3500", "ثنا", "ملک", "فیس"],
+    "expected_entity_id": "DOC-003",
+    "is_answerable": true,
+    "description": "Urdu consultation fee for Dr Sana Malik",
+    "is_held_out": false
+  },
+  {
+    "query_id": "UR-002",
+    "language": "Urdu",
+    "query": "کلینک اتوار کو کتنے بجے کھلتا ہے؟",
+    "expected_keywords": ["اتوار", "10", "اوقات"],
+    "expected_entity_id": null,
+    "is_answerable": true,
+    "description": "Urdu Sunday opening time check",
+    "is_held_out": false
+  },
+  {
+    "query_id": "UR-003",
+    "language": "Urdu",
+    "query": "کلینک کا پتہ کیا ہے اور یہ کہاں واقع ہے؟",
+    "expected_keywords": ["کریسنٹ", "پلازا", "ایف-10", "اسلام آباد"],
+    "expected_entity_id": null,
+    "is_answerable": true,
+    "description": "Urdu address and location lookup",
+    "is_held_out": false
+  },
+  {
+    "query_id": "UR-004",
+    "language": "Urdu",
+    "query": "کارڈیولوجسٹ کن دنوں میں بیٹھتے ہیں؟",
+    "expected_keywords": ["بلال", "قلب", "پیر", "شام"],
+    "expected_entity_id": "DOC-004",
+    "is_answerable": true,
+    "description": "Urdu schedule query for cardiologist",
+    "is_held_out": false
+  },
+  {
+    "query_id": "UR-005",
+    "language": "Urdu",
+    "query": "کیا واٹس ایپ میسج سے اپائنٹمنٹ کنفرم ہو جاتی ہے؟",
+    "expected_keywords": ["درخواست", "استقبالیہ", "تصدیق"],
+    "expected_entity_id": null,
+    "is_answerable": true,
+    "description": "Urdu appointment request vs confirmation",
+    "is_held_out": true
+  },
+  {
+    "query_id": "UR-006",
+    "language": "Urdu",
+    "query": "اپائنٹمنٹ منسوخ کروانے کی کیا پالیسی ہے؟",
+    "expected_keywords": ["منسوخ", "4", "گھنٹے"],
+    "expected_entity_id": null,
+    "is_answerable": true,
+    "description": "Urdu cancellation policy check",
+    "is_held_out": true
+  },
+  {
+    "query_id": "UR-007",
+    "language": "Urdu",
+    "query": "بچوں کے ڈاکٹر کی ابتدائی فیس کتنی ہے؟",
+    "expected_keywords": ["3000", "حمزہ", "بچوں", "فیس"],
+    "expected_entity_id": "DOC-002",
+    "is_answerable": true,
+    "description": "Urdu pediatric consultation fee check",
+    "is_held_out": true
+  },
+  {
+    "query_id": "UR-008",
+    "language": "Urdu",
+    "query": "کیا شدید ایمرجنسی میں مریض کو یہاں لایا جا سکتا ہے؟",
+    "expected_keywords": ["ایمرجنسی", "طبی", "مرکز"],
+    "expected_entity_id": null,
+    "is_answerable": true,
+    "description": "Urdu emergency deflection rule",
+    "is_held_out": true
+  },
+  {
+    "query_id": "RU-001",
+    "language": "Roman Urdu",
+    "query": "Dr Sana Malik ki fee kitni hai?",
+    "expected_keywords": ["sana", "3500", "fee"],
+    "expected_entity_id": "DOC-003",
+    "is_answerable": true,
+    "description": "Roman Urdu doctor fee query",
+    "is_held_out": false
+  },
+  {
+    "query_id": "RU-002",
+    "language": "Roman Urdu",
+    "query": "Clinic Sunday ko kitne bajay khulti hai?",
+    "expected_keywords": ["sunday", "10:00", "hours"],
+    "expected_entity_id": null,
+    "is_answerable": true,
+    "description": "Roman Urdu Sunday timings",
+    "is_held_out": false
+  },
+  {
+    "query_id": "RU-003",
+    "language": "Roman Urdu",
+    "query": "Novacare clinic ka address kahan hai?",
+    "expected_keywords": ["crescent", "plaza", "f-10", "islamabad"],
+    "expected_entity_id": null,
+    "is_answerable": true,
+    "description": "Roman Urdu clinic address",
+    "is_held_out": false
+  },
+  {
+    "query_id": "RU-004",
+    "language": "Roman Urdu",
+    "query": "Bacho ke doctor Hamza Qureshi kab available hotay hain?",
+    "expected_keywords": ["hamza", "qureshi", "4:00", "7:00"],
+    "expected_entity_id": "DOC-002",
+    "is_answerable": true,
+    "description": "Roman Urdu pediatric OPD hours",
+    "is_held_out": false
+  },
+  {
+    "query_id": "RU-005",
+    "language": "Roman Urdu",
+    "query": "Agar appointment cancel karwani ho to kitne time pehle batana parega?",
+    "expected_keywords": ["cancellation", "4", "hours"],
+    "expected_entity_id": null,
+    "is_answerable": true,
+    "description": "Roman Urdu cancellation notice hours",
+    "is_held_out": true
+  },
+  {
+    "query_id": "RU-006",
+    "language": "Roman Urdu",
+    "query": "Dr Ayesha Rahman ki follow up fee kitne paise hai?",
+    "expected_keywords": ["1800", "ayesha", "follow-up"],
+    "expected_entity_id": "DOC-001",
+    "is_answerable": true,
+    "description": "Roman Urdu follow-up fee lookup",
+    "is_held_out": true
+  },
+  {
+    "query_id": "RU-007",
+    "language": "Roman Urdu",
+    "query": "Kya parking ki sahulat mojood hai basement mein?",
+    "expected_keywords": ["parking", "basement", "crescent"],
+    "expected_entity_id": null,
+    "is_answerable": true,
+    "description": "Roman Urdu basement parking inquiry",
+    "is_held_out": true
+  },
+  {
+    "query_id": "RU-008",
+    "language": "Roman Urdu",
+    "query": "Kya payment card se ho skti hai ya sirf cash chalta hai?",
+    "expected_keywords": ["cash", "debit", "credit", "card"],
+    "expected_entity_id": null,
+    "is_answerable": true,
+    "description": "Roman Urdu payment options inquiry",
+    "is_held_out": true
+  },
+  {
+    "query_id": "MX-001",
+    "language": "Mixed",
+    "query": "Mujhe cardiologist ki appointment chahiye, preferably evening mein.",
+    "expected_keywords": ["bilal", "ahmed", "cardiology", "5:00"],
+    "expected_entity_id": "DOC-004",
+    "is_answerable": true,
+    "description": "Mixed Roman Urdu/English cardiologist booking inquiry",
+    "is_held_out": false
+  },
+  {
+    "query_id": "MX-002",
+    "language": "Mixed",
+    "query": "Dr Bilal Ahmed ki consultation charges kitnay PKR hain?",
+    "expected_keywords": ["bilal", "4500", "pkr"],
+    "expected_entity_id": "DOC-004",
+    "is_answerable": true,
+    "description": "Mixed fee inquiry for Dr Bilal Ahmed",
+    "is_held_out": false
+  },
+  {
+    "query_id": "MX-003",
+    "language": "Mixed",
+    "query": "Skin specialist Dr Sana Malik clinic mein kis din baithti hain?",
+    "expected_keywords": ["sana", "dermatology", "tuesday", "thursday"],
+    "expected_entity_id": "DOC-003",
+    "is_answerable": true,
+    "description": "Mixed specialty and schedule check",
+    "is_held_out": true
+  },
+  {
+    "query_id": "MX-004",
+    "language": "Mixed",
+    "query": "Clinic ki opening timings weekdays pe kya hain?",
+    "expected_keywords": ["09:00", "20:00", "monday", "friday"],
+    "expected_entity_id": null,
+    "is_answerable": true,
+    "description": "Mixed weekday hours check",
+    "is_held_out": true
+  },
+  {
+    "query_id": "MX-005",
+    "language": "Mixed",
+    "query": "Kya direct insurance claim accept hota hai NovaCare mein?",
+    "expected_keywords": ["insurance", "reimbursement", "direct"],
+    "expected_entity_id": null,
+    "is_answerable": true,
+    "description": "Mixed health insurance coverage check",
+    "is_held_out": true
+  },
+  {
+    "query_id": "UN-001",
+    "language": "English",
+    "query": "Can you prescribe me Amoxicillin for my severe toothache?",
+    "expected_keywords": [],
+    "expected_entity_id": null,
+    "is_answerable": false,
+    "description": "Unanswerable prescription request (clinical boundary violation)",
+    "is_held_out": true
+  },
+  {
+    "query_id": "UN-002",
+    "language": "Roman Urdu",
+    "query": "Kya aap dental implants ya root canal kartay hain?",
+    "expected_keywords": [],
+    "expected_entity_id": null,
+    "is_answerable": false,
+    "description": "Unanswerable dental service query (not offered by clinic)",
+    "is_held_out": true
+  },
+  {
+    "query_id": "UN-003",
+    "language": "English",
+    "query": "What is the price of an open heart bypass surgery at your hospital?",
+    "expected_keywords": [],
+    "expected_entity_id": null,
+    "is_answerable": false,
+    "description": "Unanswerable inpatient surgery request (outpatient clinic only)",
+    "is_held_out": true
+  },
+  {
+    "query_id": "UN-004",
+    "language": "Urdu",
+    "query": "کیا آپ کے پاس آنکھوں کے امراض کے سرجن موجود ہیں؟",
+    "expected_keywords": [],
+    "expected_entity_id": null,
+    "is_answerable": false,
+    "description": "Unanswerable ophthalmology query (specialty not present in clinic)",
+    "is_held_out": true
+  }
+]

@@ -38,6 +38,10 @@ SENSITIVE_PATTERNS = [
         ),
         r"\1[REDACTED]",
     ),
+    (
+        re.compile(r"(\b03\d{2}|\+?923\d{2})\d{4}(\d{3}\b)"),
+        r"\1****\2",
+    ),
 ]
 
 

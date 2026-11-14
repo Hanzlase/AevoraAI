@@ -6,11 +6,16 @@ from contextlib import asynccontextmanager
 from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.api.routes.chat import router as chat_router
 from app.api.routes.health import HealthResponse
 from app.api.routes.health import router as health_router
+from app.api.routes.staff import router as staff_router
+from app.api.routes.whatsapp import router as whatsapp_router
 from app.core.config import Settings, get_settings
 from app.core.exceptions import register_exception_handlers
 from app.core.logging import get_logger, setup_logging
+from app.database.session import init_db
+from app.services.event_worker import get_event_worker
 
 logger = get_logger(__name__)
 
@@ -25,7 +30,18 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
         settings.version,
         settings.environment,
     )
+    init_db()
+
+    worker = None
+    if settings.whatsapp_event_worker_enabled:
+        worker = get_event_worker()
+        worker.start()
+
     yield
+
+    if worker and worker.is_running:
+        await worker.stop()
+
     logger.info("Shutting down %s", settings.app_name)
 
 
@@ -64,6 +80,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     from app.api.dependencies import get_current_settings
 
     app.dependency_overrides[get_current_settings] = lambda: settings
+    app.dependency_overrides[get_settings] = lambda: settings
 
     # Basic CORS middleware configuration
     app.add_middleware(
@@ -74,8 +91,11 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         allow_headers=["*"],
     )
 
-    # Versioned API routes (e.g., /api/v1/health)
+    # Versioned API routes (e.g., /api/v1/health, /api/v1/chat, /api/v1/staff, /api/v1/whatsapp)
     app.include_router(health_router, prefix=settings.api_prefix)
+    app.include_router(chat_router, prefix=settings.api_prefix)
+    app.include_router(staff_router, prefix=settings.api_prefix)
+    app.include_router(whatsapp_router, prefix=settings.api_prefix)
 
     # Root /health alias for container health checks and local convenience
     @app.get(

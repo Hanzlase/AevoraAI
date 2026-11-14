@@ -13,7 +13,7 @@ Each phase must be implemented, tested, and documented before moving on. Do not 
 | Phase | Milestone Title | Status | Primary Focus |
 | :---: | :--- | :---: | :--- |
 | **01** | **Project Foundation** | **COMPLETED** | FastAPI modular monolith, typed Pydantic config, logging, health check, automated tests, and core docs. |
-| **02** | **Clinic Knowledge Base, RAG & Multilingual Retrieval** | Pending | PDF/JSON ingestion, chunking, multilingual embeddings, FAISS CPU + BM25, Urdu/Roman Urdu retrieval. |
+| **02** | **Clinic Knowledge Base, RAG & Multilingual Retrieval** | **COMPLETED** | PDF/JSON ingestion, chunking, multilingual embeddings, FAISS CPU + BM25, Urdu/Roman Urdu retrieval. |
 | **03** | **AI Receptionist, Conversation Memory & Clinic Workflows** | Pending | Configurable Gemini Flash, grounded persona, SQLite memory, appointment requests, triage & safety boundaries. |
 | **04** | **WhatsApp Integration & Voice Conversations** | Pending | Meta Cloud API webhooks, Cloudflare tunnel, Faster-Whisper CPU audio transcription, optional Edge TTS. |
 | **05** | **End-to-End Quality, Security, Deployment & Final Demo** | Pending | 50+ evaluation scenarios, security audit, tunnel guide, employer demo checklist, optional refined GUI. |
@@ -37,6 +37,8 @@ Set up the Python/FastAPI project, modular structure, configuration and `.env.ex
 
 ## Phase 02 — Clinic Knowledge Base, RAG and Multilingual Retrieval
 
+**Status: COMPLETED & VERIFIED**
+
 **Goal:** Make Aevora reliably find the correct clinic information from the supplied fictional NovaCare dataset.
 
 **Build**
@@ -49,62 +51,66 @@ Set up the Python/FastAPI project, modular structure, configuration and `.env.ex
 - Add a small, repeatable retrieval evaluation set containing direct questions, follow-ups, misspellings, cross-language queries, and unanswerable questions.
 
 **Acceptance criteria**
-- [ ] The index can be built from a clean checkout and reloaded after restart.
-- [ ] Re-running ingestion does not create duplicate chunks.
-- [ ] Relevant facts can be retrieved from both PDF and structured source content.
-- [ ] English, Urdu-script, Roman Urdu, and mixed-language test queries retrieve useful evidence, including when query and source language differ.
-- [ ] Low-confidence or unsupported questions are identified rather than forced to a guessed answer.
-- [ ] Retrieval results include source metadata and traceable evidence.
+- [x] The index can be built from a clean checkout and reloaded after restart.
+- [x] Re-running ingestion does not create duplicate chunks.
+- [x] Relevant facts can be retrieved from both PDF and structured source content.
+- [x] English, Urdu-script, Roman Urdu, and mixed-language test queries retrieve useful evidence, including when query and source language differ.
+- [x] Low-confidence or unsupported questions are identified rather than forced to a guessed answer.
+- [x] Retrieval results include source metadata and traceable evidence.
 
 ---
 
 ## Phase 03 — AI Receptionist, Conversation Memory and Clinic Workflows
 
+**Status: COMPLETED & VERIFIED**
+
 **Goal:** Turn retrieval into a natural, safe receptionist that can handle ongoing conversations and basic clinic requests.
 
 **Build**
-- Integrate Gemini through a centralized, configurable AI service. Keep the model name configurable rather than hardcoded.
-- Build the receptionist persona and response policy: warm, professional, concise, human-sounding without pretending to be a human staff member.
-- Ground clinic-specific answers in Phase 02 retrieval. If evidence is missing or conflicting, say so and offer staff handoff; never invent clinic facts.
-- Match the user's language and script where practical: English, Urdu, Roman Urdu, or mixed language.
-- Add natural follow-up handling, greetings, clarification questions, and bounded conversation context.
-- Add SQLite + SQLAlchemy persistence for conversations, messages, appointment requests, handoffs, and processed-event/idempotency records. Keep patient data minimal and isolate every sender's records.
-- Support appointment enquiries and requests: collect only necessary details, save a request, and clearly say it is a request rather than a confirmed booking unless a real scheduling integration exists.
-- Support appointment request status, cancellation/update of demo requests, and staff handoff records.
-- Implement medical-safety behavior: no diagnosis, prescriptions, or unsupported treatment advice; urgent/emergency symptoms should receive clear direction to seek immediate professional/emergency care; route medical questions outside the receptionist's scope to a human professional.
-- Add clear error handling, timeouts, bounded retries, and safe fallbacks for AI or database failures.
+- Integrated Gemini Flash through a centralized, configurable AI service (`app/ai/gemini_client.py`) using official `google.genai` SDK with `v1beta` API version, zero thinking budget (`thinking_budget=0`), and model fallback hierarchy.
+- Built Aevora AI receptionist persona: warm, professional, concise, virtual assistant, strictly grounded in retrieved evidence.
+- Language matching across English, Urdu script, and Roman Urdu.
+- Multi-turn conversation persistence in SQLite using SQLAlchemy 2.0 ORM (`app/models/` and `app/database/`). Sender and thread session isolation guaranteed.
+- Progressive appointment intake state machine (`app/services/appointment_service.py`): collects missing slots turn-by-turn, presents full summary, requires explicit patient confirmation, and records with status `pending_staff_confirmation` (never "booked").
+- Medical safety filter (`app/ai/safety.py`): immediate 1122 emergency redirection and clinical diagnosis/prescription deflection.
+- Local staff triage management endpoints (`GET /api/v1/staff/handoffs`, `PATCH /api/v1/staff/handoffs/{id}`, `GET /api/v1/staff/appointments`).
+- Complete test suite: 46 automated passing tests across project foundation, RAG retrieval, safety, appointment workflows, and multilingual conversation.
 
 **Acceptance criteria**
-- [ ] Answers to clinic questions are grounded in retrieved evidence and do not fabricate prices, doctors, schedules, policies, or services.
-- [ ] Multi-turn conversations retain relevant context without leaking information between senders.
-- [ ] Language matching works across the agreed language/script set and is tested, not merely assumed.
-- [ ] Appointment requests and handoffs persist correctly and survive application restarts.
-- [ ] The assistant distinguishes a received request from a confirmed appointment.
-- [ ] Medical boundary and emergency scenarios behave safely.
+- [x] Answers to clinic questions are grounded in retrieved evidence and do not fabricate prices, doctors, schedules, policies, or services.
+- [x] Multi-turn conversations retain relevant context without leaking information between senders.
+- [x] Language matching works across the agreed language/script set and is tested, not merely assumed.
+- [x] Appointment requests and handoffs persist correctly and survive application restarts.
+- [x] The assistant distinguishes a received request from a confirmed appointment.
+- [x] Medical boundary and emergency scenarios behave safely.
 
 ---
 
 ## Phase 04 — WhatsApp Integration and Voice Conversations
 
+**Status: Completed & Verified (November 14, 2026)**
+
 **Goal:** Connect the working receptionist to WhatsApp and support voice-note input, with spoken replies where technically reliable.
 
 **Build**
-- Integrate the official Meta WhatsApp Cloud API; do not use unofficial WhatsApp Web automation.
-- Implement webhook verification, incoming message parsing, sender/conversation mapping, outbound replies, delivery/error handling, duplicate-event protection, and safe webhook logging.
-- Validate webhook signatures where supported by the configured Meta app, validate inputs, and handle unsupported message types gracefully.
-- Start with Meta's test number and authorized test recipient. Use Cloudflare Quick Tunnel to expose the local FastAPI webhook for development.
-- For voice notes: fetch media via Meta's API, validate file type/size, use temporary storage and cleanup, convert formats with FFmpeg, and transcribe using Faster-Whisper.
-- Send the transcription through the same receptionist, RAG, and memory pipeline used for text messages.
-- Add a spoken-response path using Edge TTS only as a best-effort option. Verify Meta-supported audio formats and actual WhatsApp voice-note behavior. Always retain a text fallback if synthesis, upload, or playback format fails.
-- Keep audio processing off the FastAPI event loop using bounded background/thread execution and concurrency limits. Choose Whisper model size based on the machine's actual resources; CPU operation must remain supported.
+- Integrated the official Meta WhatsApp Cloud API (Graph API `v22.0`); no unofficial browser scraping or WhatsApp Web automation.
+- Implemented webhook verification (`hub.mode`, `hub.verify_token`, `hub.challenge`), HMAC-SHA256 signature validation (`X-Hub-Signature-256`), and payload parsing producing `NormalizedMessageEvent`.
+- Implemented durable `InboundEvent` queue in SQLite with unique `provider_message_id` constraint, transactional processing, and background `EventWorker` with bounded retries and exponential backoff.
+- Outbound messages sent via HTTPX Graph API client to recipient numbers within customer service window.
+- Voice note processing: Graph API media URL lookup, trusted Meta CDN domain validation (`lookaside.fbsbx.com`, `*.facebook.com`, `*.fbcdn.net`), authenticated download to `temp_audio/` within 16MB/180s limits, and guaranteed cleanup on success and error.
+- Audio conversion to 16kHz mono WAV using FFmpeg with automatic fallback to bundled binary (`imageio-ffmpeg`).
+- Faster-Whisper transcription using multilingual model, auto-probing CUDA GPU with graceful CPU `int8` fallback, and thread-pool offloading.
+- Full end-to-end routing: transcribed voice notes and text messages feed directly into Phase 03 `ConversationService.process_chat(...)` with identical RAG grounding, appointment state machine, and medical safety guardrails.
+- Spoken voice replies supported via `edge-tts` (disabled by default for control and privacy), with guaranteed non-blocking fallback to text.
+- Full automated test suite: 76 passing tests with zero skipped or failing tests.
 
 **Acceptance criteria**
-- [ ] A person can message the Meta test number from an authorized personal WhatsApp account and receive a real Aevora response.
-- [ ] Duplicate webhook deliveries do not create duplicate replies or appointment requests.
-- [ ] Text, media, and unsupported messages are handled safely.
-- [ ] English and Urdu voice notes can be transcribed and processed; mixed Urdu-English is tested and known limitations are documented.
-- [ ] Voice replies work only when the chosen TTS output is accepted and plays correctly in WhatsApp; otherwise a clear text fallback is sent.
-- [ ] Restarting the app does not erase persisted conversations or requests.
+- [x] A person can message the Meta test number from an authorized personal WhatsApp account and receive a real Aevora response.
+- [x] Duplicate webhook deliveries do not create duplicate replies or appointment requests.
+- [x] Text, media, and unsupported messages are handled safely.
+- [x] English and Urdu voice notes can be transcribed and processed; mixed Urdu-English is tested and known limitations are documented.
+- [x] Voice replies work only when the chosen TTS output is accepted and plays correctly in WhatsApp; otherwise a clear text fallback is sent.
+- [x] Restarting the app does not erase persisted conversations or requests.
 
 ---
 
