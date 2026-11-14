@@ -1,0 +1,347 @@
+{
+  "dataset_name": "NovaCare Medical Centre - Demo Knowledge Base",
+  "dataset_version": "1.0.0",
+  "fictional_demo_data": true,
+  "effective_date": "2026-11-14",
+  "usage_note": "All clinic, doctor, schedule, price, address, and policy details in this package are fictional and created solely for Aevora AI software testing. Do not represent them as real healthcare information.",
+  "clinic": {
+    "name": "NovaCare Medical Centre",
+    "tagline": "Thoughtful care. Clear answers.",
+    "address": "Suite 204, Crescent Plaza, Main Boulevard, F-10 Markaz, Islamabad, Pakistan",
+    "landmark": "Crescent Plaza is opposite the F-10 community park entrance.",
+    "phone": "Not assigned - configure a clinic-owned number before any real deployment.",
+    "email": "hello@novacare.example",
+    "website": "https://novacare.example",
+    "hours": [
+      {
+        "day": "Monday",
+        "open": "09:00",
+        "close": "20:00"
+      },
+      {
+        "day": "Tuesday",
+        "open": "09:00",
+        "close": "20:00"
+      },
+      {
+        "day": "Wednesday",
+        "open": "09:00",
+        "close": "20:00"
+      },
+      {
+        "day": "Thursday",
+        "open": "09:00",
+        "close": "20:00"
+      },
+      {
+        "day": "Friday",
+        "open": "09:00",
+        "close": "20:00"
+      },
+      {
+        "day": "Saturday",
+        "open": "09:00",
+        "close": "18:00"
+      },
+      {
+        "day": "Sunday",
+        "open": "10:00",
+        "close": "14:00"
+      }
+    ],
+    "holiday_policy": "The clinic may close on public holidays. Patients must confirm holiday opening with reception; the assistant must not assume the clinic is open.",
+    "parking": "Visitor parking is available in the Crescent Plaza basement, subject to space availability.",
+    "accessibility": "Step-free access is available from the building's main entrance. Ask reception for assistance with the lift.",
+    "payment_methods": [
+      "Cash",
+      "Debit cards",
+      "Credit cards"
+    ],
+    "insurance": "Direct insurance billing is not currently offered. Patients should ask their insurer about reimbursement eligibility."
+  },
+  "doctors": [
+    {
+      "doctor_id": "DOC-001",
+      "name": "Dr Ayesha Rahman",
+      "specialty": "Family Medicine",
+      "qualifications": "MBBS, MCPS (Family Medicine)",
+      "schedule": "Monday to Saturday, 10:00 AM to 2:00 PM",
+      "consultation_fee_pkr": 2500,
+      "follow_up_fee_pkr": 1800,
+      "follow_up_window": "Follow-up rate applies to a return visit within 7 calendar days of the initial consultation.",
+      "booking_note": "Appointments are requests until reception confirms the date and time."
+    },
+    {
+      "doctor_id": "DOC-002",
+      "name": "Dr Hamza Qureshi",
+      "specialty": "Pediatrics",
+      "qualifications": "MBBS, FCPS (Pediatrics)",
+      "schedule": "Monday, Wednesday and Friday, 4:00 PM to 7:00 PM",
+      "consultation_fee_pkr": 3000,
+      "follow_up_fee_pkr": 2000,
+      "follow_up_window": "Follow-up rate applies to a return visit within 7 calendar days of the initial consultation.",
+      "booking_note": "A parent or legal guardian must accompany patients under 18."
+    },
+    {
+      "doctor_id": "DOC-003",
+      "name": "Dr Sana Malik",
+      "specialty": "Dermatology",
+      "qualifications": "MBBS, FCPS (Dermatology)",
+      "schedule": "Tuesday, Thursday and Saturday, 3:00 PM to 7:00 PM",
+      "consultation_fee_pkr": 3500,
+      "follow_up_fee_pkr": 2500,
+      "follow_up_window": "Follow-up rate applies to a return visit within 7 calendar days of the initial consultation.",
+      "booking_note": "Please bring any previous dermatology prescriptions or reports if available."
+    },
+    {
+      "doctor_id": "DOC-004",
+      "name": "Dr Bilal Ahmed",
+      "specialty": "Cardiology",
+      "qualifications": "MBBS, FCPS (Cardiology)",
+      "schedule": "Monday, Tuesday and Thursday, 5:00 PM to 8:00 PM",
+      "consultation_fee_pkr": 4500,
+      "follow_up_fee_pkr": 3000,
+      "follow_up_window": "Follow-up rate applies to a return visit within 7 calendar days of the initial consultation.",
+      "booking_note": "For chest pain, severe breathlessness, fainting, or other urgent symptoms, do not wait for an appointment or WhatsApp reply; seek emergency care."
+    }
+  ],
+  "services": [
+    {
+      "name": "Family medicine consultation",
+      "details": "General health consultations for adults and common primary-care concerns.",
+      "availability": "By appointment; walk-ins are subject to same-day capacity."
+    },
+    {
+      "name": "Pediatric consultation",
+      "details": "Consultations for infants, children and adolescents.",
+      "availability": "By appointment during the pediatrician's published clinic hours."
+    },
+    {
+      "name": "Dermatology consultation",
+      "details": "Consultations for skin, hair and nail concerns.",
+      "availability": "By appointment during the dermatologist's published clinic hours."
+    },
+    {
+      "name": "Cardiology consultation",
+      "details": "Non-emergency outpatient cardiology consultations.",
+      "availability": "By appointment during the cardiologist's published clinic hours."
+    },
+    {
+      "name": "ECG",
+      "details": "A resting ECG can be arranged at the clinic when a trained operator is available.",
+      "availability": "Reception must confirm availability before the patient visits. It is not an emergency service."
+    },
+    {
+      "name": "Laboratory sample collection",
+      "details": "Limited blood sample collection is available through an external partner laboratory.",
+      "availability": "Monday to Saturday, 8:00 AM to 11:00 AM. Test availability, preparation instructions and report timing must be confirmed with reception or the partner lab."
+    }
+  ],
+  "appointment_policy": {
+    "request_vs_confirmation": "A request submitted to Aevora AI is not a confirmed appointment. Reception must review availability and send explicit confirmation.",
+    "recommended_arrival": "Arrive 10 minutes before the confirmed appointment.",
+    "walk_ins": "Walk-ins may be accepted if the relevant doctor has capacity, but availability is not guaranteed.",
+    "cancellation": "Please contact reception at least 4 hours before the appointment to request cancellation or a change.",
+    "late_arrival": "Arrivals more than 15 minutes late may need to be rescheduled, subject to the doctor's schedule.",
+    "required_information": "For a booking request, collect the patient's name, preferred doctor or specialty, preferred date, preferred time range, and a callback number. Ask only for information needed to forward the request.",
+    "minors": "Patients under 18 must attend with a parent or legal guardian."
+  },
+  "faq": [
+    {
+      "q": "What are the clinic's opening hours?",
+      "a": "Monday to Friday, 9:00 AM to 8:00 PM; Saturday, 9:00 AM to 6:00 PM; Sunday, 10:00 AM to 2:00 PM. Public-holiday hours must be confirmed with reception."
+    },
+    {
+      "q": "Where is NovaCare Medical Centre located?",
+      "a": "Suite 204, Crescent Plaza, Main Boulevard, F-10 Markaz, Islamabad, Pakistan. The plaza is opposite the F-10 community park entrance."
+    },
+    {
+      "q": "Can I walk in without an appointment?",
+      "a": "Walk-ins may be accepted if the relevant doctor has capacity. A walk-in is not guaranteed, so requesting an appointment first is recommended."
+    },
+    {
+      "q": "Is my WhatsApp appointment confirmed when I submit the request?",
+      "a": "No. Aevora records the request for reception. Your appointment is confirmed only after reception explicitly confirms the date and time."
+    },
+    {
+      "q": "How much does a consultation cost?",
+      "a": "Fees depend on the doctor. Dr Ayesha Rahman: PKR 2,500; Dr Hamza Qureshi: PKR 3,000; Dr Sana Malik: PKR 3,500; Dr Bilal Ahmed: PKR 4,500. Follow-up fees may apply within 7 calendar days as listed in the doctor directory."
+    },
+    {
+      "q": "What payment methods are accepted?",
+      "a": "The clinic accepts cash, debit cards and credit cards at reception."
+    },
+    {
+      "q": "Does the clinic offer direct insurance billing?",
+      "a": "No. Direct insurance billing is not currently offered. Ask your insurer whether reimbursement is available."
+    },
+    {
+      "q": "Can I cancel or change an appointment?",
+      "a": "Contact reception at least 4 hours before the appointment to request a cancellation or change. Aevora can record a request but cannot guarantee the change until reception confirms it."
+    },
+    {
+      "q": "Does NovaCare provide emergency care?",
+      "a": "No. NovaCare is an outpatient clinic and is not a 24-hour emergency department. For urgent or life-threatening symptoms, seek immediate emergency care and do not wait for a WhatsApp response."
+    },
+    {
+      "q": "Can Aevora diagnose me or recommend medicine?",
+      "a": "No. Aevora is an administrative receptionist assistant. It can share verified clinic information and help route requests, but it cannot diagnose, prescribe or replace a clinician."
+    },
+    {
+      "q": "Are teleconsultations available?",
+      "a": "Teleconsultations are not currently listed as an available service. Reception can confirm if this changes."
+    },
+    {
+      "q": "Is parking available?",
+      "a": "Visitor parking is available in the Crescent Plaza basement, subject to space availability."
+    },
+    {
+      "q": "What should I bring to my visit?",
+      "a": "Bring any relevant previous prescriptions or reports and arrive 10 minutes before your confirmed appointment. Patients under 18 must attend with a parent or legal guardian."
+    },
+    {
+      "q": "Can you tell me a doctor's live availability?",
+      "a": "Aevora can share the published clinic schedule, but it cannot see live booking availability. Reception must confirm a specific date and time."
+    },
+    {
+      "q": "What if the clinic is closed on a public holiday?",
+      "a": "Public-holiday opening can vary. Please confirm with reception; Aevora must not infer holiday opening from the regular weekly schedule."
+    }
+  ],
+  "assistant_boundaries": {
+    "role": "Administrative clinic receptionist only.",
+    "allowed": [
+      "Share clinic address and published opening hours",
+      "Explain listed services and consultation fees",
+      "Share doctor specialties and regular schedules",
+      "Collect appointment or cancellation requests",
+      "Create a staff handoff request",
+      "Explain clinic policies"
+    ],
+    "not_allowed": [
+      "Diagnose symptoms",
+      "Recommend or prescribe medicines",
+      "Interpret lab reports or ECGs",
+      "Promise an unconfirmed appointment",
+      "Invent live doctor availability",
+      "Claim that a human staff member has responded when no handoff acknowledgement exists",
+      "Invent missing clinic details"
+    ],
+    "emergency_response": "For urgent or potentially life-threatening symptoms, advise the person to seek immediate emergency medical care. Do not continue routine booking flow or suggest waiting for a WhatsApp reply.",
+    "unknown_answer": "If a fact is absent from the approved knowledge base, say it is not listed and offer to ask reception. Do not guess."
+  },
+  "multilingual_test_queries": [
+    {
+      "language": "English",
+      "query": "How much is Dr Sana Malik's consultation?",
+      "expected_fact": "Dr Sana Malik consultation fee is PKR 3,500."
+    },
+    {
+      "language": "Roman Urdu",
+      "query": "Dr Sana Malik ki fee kitni hai?",
+      "expected_fact": "Dr Sana Malik consultation fee is PKR 3,500."
+    },
+    {
+      "language": "Urdu",
+      "query": "ڈاکٹر ثنا ملک کی فیس کتنی ہے؟",
+      "expected_fact": "Dr Sana Malik consultation fee is PKR 3,500."
+    },
+    {
+      "language": "English",
+      "query": "Is the clinic open on Sunday?",
+      "expected_fact": "Sunday hours are 10:00 AM to 2:00 PM; public holidays require confirmation."
+    },
+    {
+      "language": "Roman Urdu",
+      "query": "Clinic Sunday ko kitne bajay khulti hai?",
+      "expected_fact": "Sunday opening time is 10:00 AM."
+    },
+    {
+      "language": "Urdu",
+      "query": "کلینک اتوار کو کتنے بجے کھلتا ہے؟",
+      "expected_fact": "Sunday opening time is 10:00 AM."
+    },
+    {
+      "language": "Mixed",
+      "query": "Mujhe cardiologist ki appointment chahiye, preferably evening mein.",
+      "expected_fact": "Dr Bilal Ahmed is the cardiologist; published schedule Monday, Tuesday and Thursday, 5:00 PM to 8:00 PM; specific slots require reception confirmation."
+    }
+  ],
+  "localized_content": {
+    "ur": {
+      "clinic_hours_summary": "پیر سے جمعہ: صبح 9 بجے سے رات 8 بجے تک۔ ہفتہ: صبح 9 بجے سے شام 6 بجے تک۔ اتوار: صبح 10 بجے سے دوپہر 2 بجے تک۔ سرکاری تعطیلات کے اوقات استقبالیہ سے ضرور تصدیق کریں۔",
+      "clinic_address": "سوئٹ 204، کریسنٹ پلازا، مین بلیوارڈ، ایف-10 مرکز، اسلام آباد، پاکستان۔ کریسنٹ پلازا، ایف-10 کمیونٹی پارک کے داخلی راستے کے سامنے واقع ہے۔",
+      "holiday_policy": "سرکاری تعطیلات پر کلینک بند ہو سکتا ہے۔ آنے سے پہلے استقبالیہ سے اوقات کار کی تصدیق کریں۔",
+      "appointment_confirmation": "آپ کی اپائنٹمنٹ کی درخواست موصول کر لی گئی ہے۔ استقبالیہ دستیابی چیک کر کے تاریخ اور وقت کی تصدیق کرے گا۔ درخواست بھیجنے کا مطلب اپائنٹمنٹ کی حتمی بکنگ نہیں ہے۔",
+      "walk_in_policy": "بغیر اپائنٹمنٹ آنے والے مریضوں کو ڈاکٹر کی دستیابی کے مطابق دیکھا جا سکتا ہے، لیکن واک اِن کی ضمانت نہیں ہے۔ پہلے اپائنٹمنٹ کی درخواست کرنا بہتر ہے۔",
+      "cancellation_policy": "اپائنٹمنٹ منسوخ یا تبدیل کروانے کے لیے کم از کم 4 گھنٹے پہلے استقبالیہ سے رابطہ کریں۔ تبدیلی اسی وقت حتمی ہوگی جب استقبالیہ تصدیق کرے گا۔",
+      "emergency_boundary": "NovaCare ایک آؤٹ پیشنٹ کلینک ہے اور ایمرجنسی ڈیپارٹمنٹ نہیں ہے۔ شدید یا جان لیوا علامات کی صورت میں فوراً قریبی ایمرجنسی طبی مرکز جائیں۔ واٹس ایپ جواب کا انتظار نہ کریں۔",
+      "medical_advice_boundary": "Aevora تشخیص نہیں کر سکتا، دوا تجویز نہیں کر سکتا اور ٹیسٹ رپورٹس کی تشریح نہیں کرتا۔ یہ صرف کلینک کی تصدیق شدہ انتظامی معلومات فراہم کرتا ہے۔",
+      "payment_policy": "کلینک میں نقد رقم، ڈیبٹ کارڈ اور کریڈٹ کارڈ کے ذریعے ادائیگی کی جا سکتی ہے۔",
+      "doctors": [
+        {
+          "doctor_id": "DOC-001",
+          "name": "Dr Ayesha Rahman",
+          "specialty_ur": "فیملی میڈیسن",
+          "schedule_ur": "پیر سے ہفتہ، صبح 10 بجے سے دوپہر 2 بجے تک",
+          "consultation_fee_ur": "ابتدائی مشاورت کی فیس 2,500 پاکستانی روپے ہے۔",
+          "follow_up_fee_ur": "7 دن کے اندر فالو اَپ فیس 1,800 پاکستانی روپے ہے۔"
+        },
+        {
+          "doctor_id": "DOC-002",
+          "name": "Dr Hamza Qureshi",
+          "specialty_ur": "بچوں کے امراض",
+          "schedule_ur": "پیر، بدھ اور جمعہ، شام 4 بجے سے 7 بجے تک",
+          "consultation_fee_ur": "ابتدائی مشاورت کی فیس 3,000 پاکستانی روپے ہے۔",
+          "follow_up_fee_ur": "7 دن کے اندر فالو اَپ فیس 2,000 پاکستانی روپے ہے۔"
+        },
+        {
+          "doctor_id": "DOC-003",
+          "name": "Dr Sana Malik",
+          "specialty_ur": "جلد کے امراض",
+          "schedule_ur": "منگل، جمعرات اور ہفتہ، دوپہر 3 بجے سے شام 7 بجے تک",
+          "consultation_fee_ur": "ابتدائی مشاورت کی فیس 3,500 پاکستانی روپے ہے۔",
+          "follow_up_fee_ur": "7 دن کے اندر فالو اَپ فیس 2,500 پاکستانی روپے ہے۔"
+        },
+        {
+          "doctor_id": "DOC-004",
+          "name": "Dr Bilal Ahmed",
+          "specialty_ur": "امراضِ قلب",
+          "schedule_ur": "پیر، منگل اور جمعرات، شام 5 بجے سے رات 8 بجے تک",
+          "consultation_fee_ur": "ابتدائی مشاورت کی فیس 4,500 پاکستانی روپے ہے۔",
+          "follow_up_fee_ur": "7 دن کے اندر فالو اَپ فیس 3,000 پاکستانی روپے ہے۔"
+        }
+      ],
+      "faq": [
+        {
+          "q": "کلینک کے اوقاتِ کار کیا ہیں؟",
+          "a": "پیر سے جمعہ صبح 9 بجے سے رات 8 بجے تک، ہفتہ صبح 9 بجے سے شام 6 بجے تک، اور اتوار صبح 10 بجے سے دوپہر 2 بجے تک۔ سرکاری تعطیلات کے اوقات استقبالیہ سے تصدیق کریں۔"
+        },
+        {
+          "q": "کلینک کہاں واقع ہے؟",
+          "a": "سوئٹ 204، کریسنٹ پلازا، مین بلیوارڈ، ایف-10 مرکز، اسلام آباد، پاکستان۔ یہ ایف-10 کمیونٹی پارک کے داخلی راستے کے سامنے ہے۔"
+        },
+        {
+          "q": "ڈاکٹر ثنا ملک کی فیس کتنی ہے؟",
+          "a": "ڈاکٹر ثنا ملک کی ابتدائی مشاورت کی فیس 3,500 پاکستانی روپے ہے۔ 7 دن کے اندر فالو اَپ فیس 2,500 پاکستانی روپے ہے۔"
+        },
+        {
+          "q": "کارڈیولوجسٹ کن دنوں میں دستیاب ہوتے ہیں؟",
+          "a": "ڈاکٹر بلال احمد امراضِ قلب کے ڈاکٹر ہیں۔ ان کے معمول کے اوقات پیر، منگل اور جمعرات شام 5 بجے سے رات 8 بجے تک ہیں۔ کسی مخصوص تاریخ اور وقت کی دستیابی استقبالیہ سے تصدیق کروائیں۔"
+        },
+        {
+          "q": "کیا واٹس ایپ پر درخواست بھیجنے سے اپائنٹمنٹ بک ہو جاتی ہے؟",
+          "a": "نہیں۔ Aevora صرف اپائنٹمنٹ کی درخواست ریکارڈ کرتا ہے۔ تاریخ اور وقت کی حتمی تصدیق استقبالیہ کرے گا۔"
+        },
+        {
+          "q": "اپائنٹمنٹ کتنے وقت پہلے منسوخ کرنی چاہیے؟",
+          "a": "منسوخی یا تبدیلی کی درخواست کے لیے کم از کم 4 گھنٹے پہلے استقبالیہ سے رابطہ کریں۔"
+        },
+        {
+          "q": "کیا کلینک ایمرجنسی مریض دیکھتا ہے؟",
+          "a": "نہیں۔ یہ آؤٹ پیشنٹ کلینک ہے، ایمرجنسی ڈیپارٹمنٹ نہیں۔ شدید یا جان لیوا علامات کی صورت میں فوراً ایمرجنسی طبی مدد حاصل کریں اور واٹس ایپ جواب کا انتظار نہ کریں۔"
+        }
+      ]
+    }
+  }
+}

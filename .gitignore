@@ -1,0 +1,43 @@
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+
+# Virtual Environments
+.venv/
+venv/
+env/
+ENV/
+
+# Environment Variables and Credentials
+.env
+.env.local
+.env.*.local
+! .env.example
+data/aevora_ai_credentials_setup.md
+
+# SQLite and local databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs and runtime artifacts
+logs/
+*.log
+temp_audio/
+
+# Generated vector store indexes
+data/vector_store/*
+!data/vector_store/.gitkeep
+
+# IDE and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
