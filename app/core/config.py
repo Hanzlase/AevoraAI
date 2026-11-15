@@ -33,6 +33,28 @@ class Settings(BaseSettings):
         description="Database connection URL",
     )
 
+    # Staff Dashboard Authentication (Phase 05)
+    staff_jwt_secret: SecretStr = Field(
+        default=SecretStr("aevora_clinic_staff_jwt_secret_key_2026"),
+        description="Secret key for signing staff JWT bearer tokens",
+    )
+    staff_jwt_algorithm: str = Field(
+        default="HS256",
+        description="JWT cryptographic algorithm",
+    )
+    staff_token_expire_minutes: int = Field(
+        default=480,
+        description="Staff JWT session expiry in minutes (default 8 hours)",
+    )
+    staff_admin_username: str = Field(
+        default="admin",
+        description="Default staff administrator username",
+    )
+    staff_admin_password: SecretStr = Field(
+        default=SecretStr("NovaCare2026!"),
+        description="Default staff administrator initial password",
+    )
+
     # Google Gemini API & Receptionist Settings (Phase 03)
     gemini_api_key: SecretStr | None = Field(
         default=None,

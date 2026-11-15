@@ -32,6 +32,13 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     )
     init_db()
 
+    # Seed default staff administrator
+    from app.core.auth import ensure_default_staff_user
+    from app.database.session import SessionLocal
+
+    with SessionLocal() as db:
+        ensure_default_staff_user(db, settings)
+
     worker = None
     if settings.whatsapp_event_worker_enabled:
         worker = get_event_worker()
@@ -113,6 +120,24 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             version=settings_dep.version,
             environment=settings_dep.environment,
         )
+
+    # Serve Staff Dashboard UI
+    from pathlib import Path
+
+    from starlette.responses import RedirectResponse
+    from starlette.staticfiles import StaticFiles
+
+    dashboard_dir = Path("app/static/dashboard")
+    dashboard_dir.mkdir(parents=True, exist_ok=True)
+    app.mount(
+        "/dashboard",
+        StaticFiles(directory=str(dashboard_dir), html=True),
+        name="dashboard",
+    )
+
+    @app.get("/", include_in_schema=False)
+    async def root_redirect() -> RedirectResponse:
+        return RedirectResponse(url="/dashboard")
 
     return app
 

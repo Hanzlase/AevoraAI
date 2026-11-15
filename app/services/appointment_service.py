@@ -344,7 +344,9 @@ class AppointmentService:
             select(AppointmentRequest)
             .where(
                 AppointmentRequest.conversation_id == conversation_id,
-                AppointmentRequest.status.in_(["draft", "pending_staff_confirmation"]),
+                AppointmentRequest.status.in_(
+                    ["draft", "pending_staff_confirmation", "confirmed_by_staff", "reviewed"]
+                ),
             )
             .order_by(AppointmentRequest.created_at.desc())
         )

@@ -45,10 +45,11 @@ EMERGENCY_KEYWORDS_ROMAN = [
 ]
 
 CLINICAL_ADVICE_KEYWORDS_EN = [
-    r"\bdiagnose\b",
-    r"\bwhat\s+(medicine|medication|drug|pill|syrup)\s+(should|can)\s+i\s+take\b",
+    r"\bdiagnos(e|is)\b",
+    r"\bwhat\s+(medicine|medication|drug|pill|syrup|antibiotic)\s+(should|can)\s+i\s+take\b",
+    r"\b(dosage|dose)\s+(of|for)\b",
     r"\bprescribe\b",
-    r"\bprescription\s+for\b",
+    r"\bprescription(\s+for)?\b",
     r"\bwhat\s+illness\s+do\s+i\s+have\b",
     r"\bwhat\s+disease\s+do\s+i\s+have\b",
     r"\bcure\s+my\b",

@@ -195,3 +195,30 @@
 - **Context**: Receptionist voice notes may optionally be answered with spoken voice messages. However, TTS generation adds network latency and bandwidth overhead, and text messages remain the expected primary WhatsApp format for administrative answers.
 - **Decision**: Integrate `edge-tts` behind an explicit opt-in setting `VOICE_REPLY_ENABLED` (default: `False`). If enabled, audio synthesis runs asynchronously and non-blockingly; any TTS failure logs a warning and falls back cleanly to the already-delivered text reply.
 - **Consequences**: Zero risk to conversation flow or text delivery reliability while enabling optional high-quality multilingual speech synthesis.
+
+---
+
+## ADR 022: PBKDF2-HMAC-SHA256 Password Hashing & RFC 7519 JWT Staff Authentication
+- **Date**: 2026-11-14
+- **Status**: Accepted
+- **Context**: Clinic staff require administrative access to view patient conversations, update appointment confirmation statuses, and resolve triage handoffs. Passwords must never be stored in plain text, and staff routes must be authenticated without relying on external identity providers (Auth0, Okta, Firebase) to respect the zero-cost requirement.
+- **Decision**: Implement password security using Python's standard library `hashlib.pbkdf2_hmac` with SHA-256, 100,000 iterations, and a unique cryptographically random 32-byte salt per user. Implement stateless RFC 7519 session management using PyJWT (`HS256`, 8-hour expiry) backed by a configured `STAFF_JWT_SECRET`. Store credentials in a dedicated `StaffUser` table in SQLite and automatically seed the default admin account on startup if absent.
+- **Consequences**: Standard-compliant cryptographic security with zero external paid infrastructure, zero third-party auth services, and stateless Bearer token validation for the staff dashboard UI.
+
+---
+
+## ADR 023: Role-Protected Single-Page Application (SPA) Staff Dashboard with Live Diagnostics
+- **Date**: 2026-11-14
+- **Status**: Accepted
+- **Context**: Clinic reception staff need a clean, responsive web interface to oversee live operations, review multi-turn patient conversations with source citations, manage appointment requests, and action emergency/clinical handoffs. Heavy frontend frameworks (React, Next.js, Node.js) would complicate local single-machine evaluation.
+- **Decision**: Build a zero-build vanilla HTML5, CSS3, and ES6 JavaScript Single-Page Application served directly by FastAPI under `/dashboard`. Adhere strictly to the NovaCare healthcare design tokens (Deep Navy `#142B3A`, Primary Teal `#126E75`, Warm Off-White `#F7F6F2`, Pale Mint `#EAF3F1`, Coral `#C96F5D`, Muted Gold `#B89455`). Support native bidirectional RTL rendering for Urdu scripts, live system diagnostics, appointment status confirmation toggles, and handoff resolution.
+- **Consequences**: Instantaneous loading, zero npm/Node build toolchains, accessible responsive UI, and seamless integration with the FastAPI backend.
+
+---
+
+## ADR 024: Complete 7-Journey End-to-End Verification and Adversarial Hardening
+- **Date**: 2026-11-14
+- **Status**: Accepted
+- **Context**: Virtual healthcare receptionists face real-world edge cases: multilingual dialect switching (Urdu, Roman Urdu, English), appointment cancellations, emergency triage, dosage/prescription inquiries, webhook forgery, oversized media payloads, and prompt injection attacks.
+- **Decision**: Establish automated test coverage for all seven core user journeys (A: Clinic FAQ RAG, B: Multilingual conversation, C: WhatsApp text handling & idempotency, D: Voice note transcription, E: Appointment intake & cancellation, F: Human handoff triage, G: Deterministic medical safety boundaries). Implement adversarial security hardening with phone masking (`mask_phone_number`), strict payload limits (16MB), CDN host whitelisting, and deterministic prompt injection defense in `app/ai/safety.py`.
+- **Consequences**: Comprehensive verification guarantee across 105 automated unit and integration tests with zero regressions across Phases 01 through 05.

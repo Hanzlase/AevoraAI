@@ -45,6 +45,18 @@ SENSITIVE_PATTERNS = [
 ]
 
 
+def mask_phone_number(phone: str) -> str:
+    """Mask middle digits of a phone number for safe display and logging."""
+    if not phone or len(phone) < 6:
+        return "***"
+    cleaned = phone.strip()
+    if cleaned.startswith("+"):
+        return f"{cleaned[:5]}****{cleaned[-4:]}"
+    if len(cleaned) >= 8:
+        return f"{cleaned[:4]}****{cleaned[-3:]}"
+    return f"{cleaned[:2]}***{cleaned[-1:]}"
+
+
 class SensitiveDataSanitizingFilter(logging.Filter):
     """Logging filter that scrubs tokens, secrets, and credentials from log messages."""
 

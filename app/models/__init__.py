@@ -5,6 +5,7 @@ from app.models.conversation import Conversation
 from app.models.handoff import HandoffRequest
 from app.models.inbound_event import InboundEvent
 from app.models.message import Message
+from app.models.user import StaffUser
 
 __all__ = [
     "AppointmentRequest",
@@ -12,4 +13,5 @@ __all__ = [
     "HandoffRequest",
     "InboundEvent",
     "Message",
+    "StaffUser",
 ]
